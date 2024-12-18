@@ -1,0 +1,39 @@
+[2024-03-20 19:55:16,352][torch.distributed.distributed_c10d][INFO] - Added key: store_based_barrier_key:1 to store for rank: 3
+[2024-03-20 19:55:16,353][torch.distributed.distributed_c10d][INFO] - Rank 3: Completed store-based barrier for key:store_based_barrier_key:1 with 4 nodes.
+[2024-03-20 19:55:30,684][strhub.data.dataset][INFO] - dataset root:	/ssd_scratch/cvit/lalitha/parseq_punjabi_train/data/train/real
+[2024-03-20 19:55:30,844][strhub.data.dataset][INFO] - 	lmdb:	punjabi	num samples: 81042
+[2024-03-20 19:56:25,773][torch.distributed.distributed_c10d][INFO] - Added key: store_based_barrier_key:1 to store for rank: 3
+[2024-03-20 19:56:25,907][torch.distributed.distributed_c10d][INFO] - Rank 3: Completed store-based barrier for key:store_based_barrier_key:1 with 4 nodes.
+[2024-03-20 19:56:28,315][strhub.data.dataset][INFO] - dataset root:	/ssd_scratch/cvit/lalitha/parseq_punjabi_train/data/train/real
+[2024-03-20 19:56:28,464][strhub.data.dataset][INFO] - 	lmdb:	punjabi	num samples: 81042
+[2024-03-20 19:56:28,963][strhub.data.dataset][INFO] - dataset root:	/ssd_scratch/cvit/lalitha/parseq_punjabi_train/data/val
+[2024-03-20 19:56:28,994][strhub.data.dataset][INFO] - 	lmdb:	punjabi	num samples: 13627
+[2024-03-20 19:56:45,915][torch.nn.parallel.distributed][INFO] - Reducer buckets have been rebuilt in this iteration.
+[2024-03-20 20:42:24,030][torch.distributed.distributed_c10d][INFO] - Added key: store_based_barrier_key:1 to store for rank: 3
+[2024-03-20 20:42:24,123][torch.distributed.distributed_c10d][INFO] - Rank 3: Completed store-based barrier for key:store_based_barrier_key:1 with 4 nodes.
+[2024-03-20 20:42:27,006][strhub.data.dataset][INFO] - dataset root:	/ssd_scratch/cvit/lalitha/parseq_punjabi_train/data/train/real
+[2024-03-20 20:42:27,160][strhub.data.dataset][INFO] - 	lmdb:	punjabi	num samples: 81042
+[2024-03-20 20:42:27,278][strhub.data.dataset][INFO] - dataset root:	/ssd_scratch/cvit/lalitha/parseq_punjabi_train/data/val
+[2024-03-20 20:42:27,303][strhub.data.dataset][INFO] - 	lmdb:	punjabi	num samples: 13627
+[2024-03-20 20:42:36,075][torch.nn.parallel.distributed][INFO] - Reducer buckets have been rebuilt in this iteration.
+[2024-03-21 07:26:10,711][torch.distributed.distributed_c10d][INFO] - Added key: store_based_barrier_key:1 to store for rank: 3
+[2024-03-21 07:26:10,794][torch.distributed.distributed_c10d][INFO] - Rank 3: Completed store-based barrier for key:store_based_barrier_key:1 with 4 nodes.
+[2024-03-21 07:26:14,555][strhub.data.dataset][INFO] - dataset root:	/ssd_scratch/cvit/lalitha/parseq_punjabi_train/data/train/real
+[2024-03-21 07:26:14,756][strhub.data.dataset][INFO] - 	lmdb:	punjabi	num samples: 81042
+[2024-03-21 07:26:15,112][strhub.data.dataset][INFO] - dataset root:	/ssd_scratch/cvit/lalitha/parseq_punjabi_train/data/val
+[2024-03-21 07:26:15,138][strhub.data.dataset][INFO] - 	lmdb:	punjabi	num samples: 13627
+[2024-03-21 07:26:30,546][torch.nn.parallel.distributed][INFO] - Reducer buckets have been rebuilt in this iteration.
+[2024-03-21 17:44:25,474][torch.distributed.distributed_c10d][INFO] - Added key: store_based_barrier_key:1 to store for rank: 3
+[2024-03-21 17:44:25,485][torch.distributed.distributed_c10d][INFO] - Rank 3: Completed store-based barrier for key:store_based_barrier_key:1 with 4 nodes.
+[2024-03-21 17:44:29,153][strhub.data.dataset][INFO] - dataset root:	/ssd_scratch/cvit/lalitha/parseq_punjabi_train/data/train/real
+[2024-03-21 17:44:29,345][strhub.data.dataset][INFO] - 	lmdb:	punjabi	num samples: 81042
+[2024-03-21 17:44:29,564][strhub.data.dataset][INFO] - dataset root:	/ssd_scratch/cvit/lalitha/parseq_punjabi_train/data/val
+[2024-03-21 17:44:29,595][strhub.data.dataset][INFO] - 	lmdb:	punjabi	num samples: 13627
+[2024-03-21 17:44:38,583][torch.nn.parallel.distributed][INFO] - Reducer buckets have been rebuilt in this iteration.
+[2024-03-21 19:07:08,955][torch.distributed.distributed_c10d][INFO] - Added key: store_based_barrier_key:1 to store for rank: 3
+[2024-03-21 19:07:08,966][torch.distributed.distributed_c10d][INFO] - Rank 3: Completed store-based barrier for key:store_based_barrier_key:1 with 4 nodes.
+[2024-03-21 19:07:12,040][strhub.data.dataset][INFO] - dataset root:	/ssd_scratch/cvit/lalitha/parseq_punjabi_train/data/train/real
+[2024-03-21 19:07:12,203][strhub.data.dataset][INFO] - 	lmdb:	punjabi	num samples: 81042
+[2024-03-21 19:07:12,373][strhub.data.dataset][INFO] - dataset root:	/ssd_scratch/cvit/lalitha/parseq_punjabi_train/data/val
+[2024-03-21 19:07:12,399][strhub.data.dataset][INFO] - 	lmdb:	punjabi	num samples: 13627
+[2024-03-21 19:07:21,197][torch.nn.parallel.distributed][INFO] - Reducer buckets have been rebuilt in this iteration.

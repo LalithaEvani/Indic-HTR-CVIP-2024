@@ -1,0 +1,9 @@
+-> To add charset of the language
+-> change the charset_train and charset_test accordinly in configs
+-> do not normalize unicode so comment those lines in dataset.py 
+-> change the directories of test accordingly in test.py 
+-> the data should be stored according to the skeleton mentioned in the actual parseq code 
+-> comment out the code that is allowing the inclusion of SWA 
+-> take batch size as 254
+-> intial epochs for pre-training = 30 
+-> change val check interval accordingly

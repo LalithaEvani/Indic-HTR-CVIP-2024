@@ -1,0 +1,5 @@
+- +experiment=parseq
+- trainer.max_epochs=110
+- model.batch_size=128
+- trainer.accelerator=gpu
+- trainer.devices=2
