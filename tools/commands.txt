@@ -1,0 +1,4 @@
+1) inv oov conversion command
+python tools/inv_oov_convert.py --lmdb_path_train=data/train_old/ --lmdb_path_test=data/test/new/ --output_gtfile_inv=test_old/new/test/inv.txt --output_gtfile_oov=test_old/new/test/oov.txt --output_folder_inv=test_old/new/test/inv/ --output_folder_oov=test_old/new/test/oov/
+
+2) 
