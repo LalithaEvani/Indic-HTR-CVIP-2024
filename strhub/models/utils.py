@@ -12,13 +12,7 @@ class InvalidModelError(RuntimeError):
 
 
 _WEIGHTS_URL = {
-    'parseq-tiny': 'https://github.com/baudm/parseq/releases/download/v1.0.0/parseq_tiny-e7a21b54.pt',
-    'parseq-patch16-224': 'https://github.com/baudm/parseq/releases/download/v1.0.0/parseq_small_patch16_224-fcf06f5a.pt',
     'parseq': 'https://github.com/baudm/parseq/releases/download/v1.0.0/parseq-bb5792a6.pt',
-    'abinet': 'https://github.com/baudm/parseq/releases/download/v1.0.0/abinet-1d1e373e.pt',
-    'trba': 'https://github.com/baudm/parseq/releases/download/v1.0.0/trba-cfaed284.pt',
-    'vitstr': 'https://github.com/baudm/parseq/releases/download/v1.0.0/vitstr-26d0fcf4.pt',
-    'crnn': 'https://github.com/baudm/parseq/releases/download/v1.0.0/crnn-679d0e31.pt',
 }
 
 
@@ -45,18 +39,8 @@ def _get_config(experiment: str, **kwargs):
 
 
 def _get_model_class(key):
-    if 'abinet' in key:
-        from .abinet.system import ABINet as ModelClass
-    elif 'crnn' in key:
-        from .crnn.system import CRNN as ModelClass
-    elif 'parseq' in key:
+    if 'parseq' in key:
         from .parseq.system import PARSeq as ModelClass
-    elif 'trba' in key:
-        from .trba.system import TRBA as ModelClass
-    elif 'trbc' in key:
-        from .trba.system import TRBC as ModelClass
-    elif 'vitstr' in key:
-        from .vitstr.system import ViTSTR as ModelClass
     else:
         raise InvalidModelError(f"Unable to find model class for '{key}'")
     return ModelClass
