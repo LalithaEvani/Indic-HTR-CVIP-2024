@@ -1,0 +1,38 @@
+number of words in dataset: 82554
+number of words in dataset: 12947
+number of words in dataset: 17574
+length of lexicon list 12812
+max of label length from data: 29
+count of labels transformed or characters removed: 0
+count of english containing labels: 0
+max label length exceeded count: 0
+labels not counted: 0
+labels dim skipped: 0
+count of labels not counted with some special chars : 0
+count of labels changed: 0
+process number : 0 start index: 0
+process number : 1 start index: 1465
+process number : 2 start index: 2930
+process number : 3 start index: 4395
+process number : 4 start index: 5860
+process number : 5 start index: 7325
+process number : 6 start index: 8790
+process number : 7 start index: 10255
+process number : 8 start index: 11720
+process number : 9 start index: 13185
+process number : 10 start index: 14650
+process number : 11 start index: 16115
+process number : 4 end index: 7325 completed
+process number : 9 end index: 14650 completed
+process number : 10 end index: 16115 completed
+process number : 8 end index: 13185 completed
+process number : 1 end index: 2930 completed
+process number : 11 end index: 17574 completed
+process number : 3 end index: 5860 completed
+process number : 7 end index: 11720 completed
+process number : 6 end index: 10255 completed
+process number : 5 end index: 8790 completed
+process number : 0 end index: 1465 completed
+process number : 2 end index: 4395 completed
+distance matrix computed shape 17574
+shape of matrix [pred,lexicon](17574, 12812)

@@ -1,7 +1,7 @@
 defaults:
   - _self_
   - model: parseq
-  - charset: combined_4
+  - charset: bengali
   - dataset: real
 
 model:
@@ -9,10 +9,10 @@ model:
   img_size: [ 32, 128 ]  # [ height, width ]
   max_label_length: 35
   # The ordering in charset_train matters. It determines the token IDs assigned to each character.
-  charset_train: combined_4
+  charset_train: ???
   # For charset_test, ordering doesn't matter.
-  charset_test: combined_4
-  batch_size: 128
+  charset_test: bengali
+  batch_size: 254
   weight_decay: 0.0
   warmup_pct: 0.075  # equivalent to 1.5 epochs of warm up
 
@@ -35,7 +35,7 @@ trainer:
   _convert_: all
   val_check_interval: 200
   #max_steps: 169680  # 20 epochs x 8484 steps (for batch size = 384, real data)
-  max_epochs: 250
+  max_epochs: 110
   gradient_clip_val: 20
   accelerator: gpu
   devices: 2

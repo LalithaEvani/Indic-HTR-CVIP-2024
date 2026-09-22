@@ -98,7 +98,6 @@ class LmdbDataset(Dataset):
         max = 0
         with self._create_env() as env, env.begin() as txn:
             num_samples = int(txn.get('num-samples'.encode()))
-            print(f'number of samples: {num_samples}')
             if self.unlabelled:
                 return num_samples
             for index in range(num_samples):
@@ -112,7 +111,7 @@ class LmdbDataset(Dataset):
                 # if normalize_unicode:
                 #     label = unicodedata.normalize('NFKD', label).encode('ascii', 'ignore').decode()
                 # Filter by length before removing unsupported characters. The original label might be too long.
-                if len(label) > 25:
+                if len(label) > max_label_len:
                     # print(f'skipped because max_length exceeded: {label}')
                     count_max_length = count_max_length + 1
                     
@@ -220,7 +219,6 @@ class LmdbDataset(Dataset):
         print(f'count of labels not counted with some special chars : {count_skipped_chars}')
         print(f'count of labels changed: {change_count}')
         # print(f'count of labels containing dev chars: {count_dev_chars}')
-        print(f'number of samples after transformation: {len(self.labels)}')
         return len(self.labels)
 
     def __len__(self):
@@ -242,5 +240,5 @@ class LmdbDataset(Dataset):
         if self.transform is not None:
             img = self.transform(img)
 
-        return img, label
+        return index, img, label
 

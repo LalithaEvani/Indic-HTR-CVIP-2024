@@ -33,15 +33,15 @@ from strhub.data.utils import CharsetAdapter, CTCTokenizer, Tokenizer, BaseToken
 
 @dataclass
 class BatchResult:
+    pred_labels : List[str]
     num_samples: int
     correct: int
     ned: float
-    crr: float
     confidence: float
     label_length: int
     loss: Tensor
     loss_numel: int
-
+    
 
 
 class BaseSystem(pl.LightningModule, ABC):
@@ -99,13 +99,12 @@ class BaseSystem(pl.LightningModule, ABC):
 
     def _eval_step(self, batch, validation: bool) -> Optional[STEP_OUTPUT]:
         images, labels = batch
-
+        pred_labels=[]
         correct = 0
         total = 0
         ned = 0
         confidence = 0
         label_length = 0
-        crr = 0
         if validation:
             logits, loss, loss_numel = self.forward_logits_loss(images, labels)
         else:
@@ -123,14 +122,14 @@ class BaseSystem(pl.LightningModule, ABC):
         for pred, prob, gt in zip(preds, probs, labels):
             confidence += prob.prod().item()
             pred = self.charset_adapter(pred)
+            pred_labels.append(pred)
             # Follow ICDAR 2019 definition of N.E.D.
             ned += edit_distance(pred, gt) / max(len(pred), len(gt))
-            crr += edit_distance(pred, gt) / len(gt)
             if pred == gt:
                 correct += 1
             total += 1
             label_length += len(pred)
-        return dict(output=BatchResult(total, correct, ned, crr, confidence, label_length, loss, loss_numel))
+        return dict(output=BatchResult(pred_labels, total, correct, ned, confidence, label_length, loss, loss_numel))
 
     @staticmethod
     def _aggregate_results(outputs: EPOCH_OUTPUT) -> Tuple[float, float, float]:

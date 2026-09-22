@@ -1,0 +1,48 @@
+number of words in dataset: 85270
+number of words in dataset: 11878
+number of words in dataset: 19635
+length of lexicon list 13405
+max of label length from data: 34
+count of labels transformed or characters removed: 0
+count of english containing labels: 0
+max label length exceeded count: 1
+labels not counted: 0
+labels dim skipped: 0
+count of labels not counted with some special chars : 0
+count of labels changed: 0
+process number : 0 start index: 0
+process number : 1 start index: 1637
+process number : 2 start index: 3274
+process number : 3 start index: 4911
+process number : 4 start index: 6548
+process number : 5 start index: 8185
+process number : 6 start index: 9822
+process number : 7 start index: 11459
+process number : 8 start index: 13096
+process number : 9 start index: 14733
+process number : 10 start index: 16370
+process number : 11 start index: 18007
+process number : 4 end index: 8185 completed
+process number : 8 end index: 14733 completed
+process number : 5 end index: 9822 completed
+process number : 1 end index: 3274 completed
+process number : 9 end index: 16370 completed
+process number : 3 end index: 6548 completed
+process number : 6 end index: 11459 completed
+process number : 7 end index: 13096 completed
+process number : 11 end index: 19634 completed
+process number : 2 end index: 4911 completed
+process number : 10 end index: 18007 completed
+process number : 0 end index: 1637 completed
+distance matrix computed shape 19634
+shape of matrix [pred,lexicon](19634, 13405)
+ final cer for recall 1 is : 0.6128161123407078
+ wer for recall 1 is : 1.441377202811438
+ final cer for recall 2 is : 0.399597462293326
+ wer for recall 2 is : 0.7792604665376359
+ final cer for recall 3 is : 0.30928216035532874
+ wer for recall 3 is : 0.5755322399918441
+ final cer for recall 4 is : 0.25294779491431163
+ wer for recall 4 is : 0.4583885097280245
+ final cer for recall 5 is : 0.21081286737651148
+ wer for recall 5 is : 0.37689721910970775
