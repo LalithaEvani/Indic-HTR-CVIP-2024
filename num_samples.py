@@ -10,7 +10,8 @@ parser.add_argument("--language", type=str, help="language charset to use")
 
 args = parser.parse_args()
 lmdb_root = args.lmdb_root
-char_root = os.path.join("/ssd_scratch/cvit/lalitha/code/configs/charset/",args.language+".yaml")
+repo_root = os.path.dirname(os.path.abspath(__file__))
+char_root = os.path.join(repo_root, "configs", "charset", args.language + ".yaml")
 with open(char_root, 'r', encoding='utf-8') as file:
     config = yaml.safe_load(file)
 charset= config['model']['charset_train']
