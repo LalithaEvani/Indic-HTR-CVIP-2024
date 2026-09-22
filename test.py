@@ -76,6 +76,10 @@ def main():
     parser.add_argument('--new', action='store_true', default=False, help='Evaluate on new benchmark datasets')
     parser.add_argument('--rotation', type=int, default=0, help='Angle of rotation (counter clockwise) in degrees.')
     parser.add_argument('--device', default='cuda')
+    parser.add_argument('--test_set', nargs='+', default=['IIIT-INDIC-HW-WORDS'],
+                        help="Subdirectory name(s) under <data_root>/test/ to evaluate on "
+                             "(e.g. the paper's Table 2 uses the full IIIT-INDIC-HW-WORDS test set; "
+                             "pass 'inv_lmdb oov_lmdb' for the in-vocab/out-of-vocab split analysis)")
     args, unknown = parser.parse_known_args()
     kwargs = parse_model_args(unknown) 
     print(f'Additional keyword arguments: {kwargs}')
@@ -85,11 +89,7 @@ def main():
     datamodule = SceneTextDataModule(args.data_root, '_unused_', hp.img_size, hp.max_label_length, hp.charset_train,
                                      hp.charset_test, args.batch_size, args.num_workers, False, rotation=args.rotation)
 
-    # test_set = SceneTextDataModule.TEST_BENCHMARK_SUB + SceneTextDataModule.TEST_BENCHMARK
-    # if args.new:
-    #     test_set += SceneTextDataModule.TEST_NEW
-    # test_set = SceneTextDataModule.TEST_NEW
-    test_set = sorted(set(['inv_lmdb','oov_lmdb']))
+    test_set = sorted(set(args.test_set))
 
     results = {}
     max_width = max(map(len, test_set))
@@ -116,7 +116,7 @@ def main():
         results[name] = Result(name, total, accuracy, mean_ned, mean_conf, mean_label_length, wer)
 
     result_groups = {
-        'Benchmark (Subset)': ['inv_lmdb','oov_lmdb']
+        'Benchmark (Subset)': test_set
     }
     if args.new:
         result_groups.update({'New': SceneTextDataModule.TEST_NEW})

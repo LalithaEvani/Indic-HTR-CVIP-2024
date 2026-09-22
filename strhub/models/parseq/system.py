@@ -226,7 +226,9 @@ class PARSeq(CrossEntropySystem):
         return content_mask, query_mask
 
     def training_step(self, batch, batch_idx) -> STEP_OUTPUT:
-        images, labels = batch
+        # LmdbDataset yields (index, image, label); index is only needed by
+        # test_combined.py's qualitative-comparison workflow, unused here.
+        _, images, labels = batch if len(batch) == 3 else (None, *batch)
         tgt = self.tokenizer.encode(labels, self._device)
 
         # Encode the source sequence (i.e. the image codes)
