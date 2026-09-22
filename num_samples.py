@@ -5,8 +5,8 @@ import os
 
 
 parser = argparse.ArgumentParser(description="take lmdb path")
-parser.add_argument("--lmdb_root", type=str, help="path to the LMDB root directory")
-parser.add_argument("--language", type=str, help="language charset to use")
+parser.add_argument("--lmdb_root", type=str, required=True, help="path to the LMDB root directory")
+parser.add_argument("--language", type=str, required=True, help="language charset to use (matches a configs/charset/<language>.yaml)")
 
 args = parser.parse_args()
 lmdb_root = args.lmdb_root

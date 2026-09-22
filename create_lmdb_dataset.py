@@ -77,9 +77,9 @@ def createDataset(inputPath, gtFile, outputPath, checkValid=True):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="take paths")
-    parser.add_argument("--inputPath", type=str, help="path to the input image folder ")
-    parser.add_argument("--gtFile", type=str, help='gtfile path along with file name ')
-    parser.add_argument("--outputPath", type=str, help="lmdb output path" )
+    parser.add_argument("--inputPath", type=str, required=True, help="path to the input image folder (unused; gtFile lines must already contain absolute image paths)")
+    parser.add_argument("--gtFile", type=str, required=True, help='ground-truth file: one "<absolute image path> <label>" line per sample, UTF-8')
+    parser.add_argument("--outputPath", type=str, required=True, help="LMDB output directory to create")
 
     args = parser.parse_args()
     inputPath= args.inputPath
