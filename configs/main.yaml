@@ -17,7 +17,7 @@ model:
   warmup_pct: 0.075  # equivalent to 1.5 epochs of warm up
 
 data:
-  _target_: indichtr.data.module.SceneTextDataModule
+  _target_: indichtr.data.module.IndicHTRDataModule
   # No single shared root across languages -- always pass your own, e.g.
   # data.root_dir=<path to <lang>/datasets> (see Datasets.md).
   root_dir: ???
@@ -43,7 +43,6 @@ trainer:
   devices: 2
 
 ckpt_path: null
-pretrained: null
 
 hydra:
   output_subdir: config

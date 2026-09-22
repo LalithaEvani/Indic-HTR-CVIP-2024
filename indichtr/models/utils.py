@@ -1,41 +1,10 @@
-from pathlib import PurePath
 from typing import Sequence
 
-import torch
 from torch import nn
-
-import yaml
 
 
 class InvalidModelError(RuntimeError):
     """Exception raised for any model-related error (creation, loading)"""
-
-
-_WEIGHTS_URL = {
-    'parseq': 'https://github.com/baudm/parseq/releases/download/v1.0.0/parseq-bb5792a6.pt',
-}
-
-
-def _get_config(experiment: str, **kwargs):
-    """Emulates hydra config resolution"""
-    root = PurePath(__file__).parents[2]
-    with open(root / 'configs/main.yaml', 'r') as f:
-        config = yaml.load(f, yaml.Loader)['model']
-    with open(root / f'configs/charset/94_full.yaml', 'r') as f:
-        config.update(yaml.load(f, yaml.Loader)['model'])
-    with open(root / f'configs/experiment/{experiment}.yaml', 'r') as f:
-        exp = yaml.load(f, yaml.Loader)
-    # Apply base model config
-    model = exp['defaults'][0]['override /model']
-    with open(root / f'configs/model/{model}.yaml', 'r') as f:
-        config.update(yaml.load(f, yaml.Loader))
-    # Apply experiment config
-    if 'model' in exp:
-        config.update(exp['model'])
-    config.update(kwargs)
-    # Workaround for now: manually cast the lr to the correct type.
-    config['lr'] = float(config['lr'])
-    return config
 
 
 def _get_model_class(key):
@@ -46,34 +15,9 @@ def _get_model_class(key):
     return ModelClass
 
 
-def get_pretrained_weights(experiment):
-    try:
-        url = _WEIGHTS_URL[experiment]
-    except KeyError:
-        raise InvalidModelError(f"No pretrained weights found for '{experiment}'") from None
-    return torch.hub.load_state_dict_from_url(url=url, map_location='cpu', check_hash=True)
-
-
-def create_model(experiment: str, pretrained: bool = False, **kwargs):
-    try:
-        config = _get_config(experiment, **kwargs)
-    except FileNotFoundError:
-        raise InvalidModelError(f"No configuration found for '{experiment}'") from None
-    ModelClass = _get_model_class(experiment)
-    model = ModelClass(**config)
-    if pretrained:
-        model.load_state_dict(get_pretrained_weights(experiment))
-    return model
-
-
 def load_from_checkpoint(checkpoint_path: str, **kwargs):
-    if checkpoint_path.startswith('pretrained='):
-        model_id = checkpoint_path.split('=', maxsplit=1)[1]
-        model = create_model(model_id, True, **kwargs)
-    else:
-        ModelClass = _get_model_class(checkpoint_path)
-        model = ModelClass.load_from_checkpoint(checkpoint_path, **kwargs)
-    return model
+    ModelClass = _get_model_class(checkpoint_path)
+    return ModelClass.load_from_checkpoint(checkpoint_path, **kwargs)
 
 
 def parse_model_args(args):

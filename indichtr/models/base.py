@@ -30,7 +30,7 @@ from torch import Tensor
 from torch.optim import Optimizer
 from torch.optim.lr_scheduler import OneCycleLR
 
-from indichtr.data.utils import CharsetAdapter, CTCTokenizer, Tokenizer, BaseTokenizer
+from indichtr.data.utils import CharsetAdapter, Tokenizer, BaseTokenizer
 
 
 @dataclass
@@ -186,22 +186,3 @@ class CrossEntropySystem(BaseSystem):
         loss = F.cross_entropy(logits.flatten(end_dim=1), targets.flatten(), ignore_index=self.pad_id)
         loss_numel = (targets != self.pad_id).sum()
         return logits, loss, loss_numel
-
-
-class CTCSystem(BaseSystem):
-
-    def __init__(self, charset_train: str, charset_test: str,
-                 batch_size: int, lr: float, warmup_pct: float, weight_decay: float) -> None:
-        tokenizer = CTCTokenizer(charset_train)
-        super().__init__(tokenizer, charset_test, batch_size, lr, warmup_pct, weight_decay)
-        self.blank_id = tokenizer.blank_id
-
-    def forward_logits_loss(self, images: Tensor, labels: List[str]) -> Tuple[Tensor, Tensor, int]:
-        targets = self.tokenizer.encode(labels, self.device)
-        logits = self.forward(images)
-        log_probs = logits.log_softmax(-1).transpose(0, 1)  # swap batch and seq. dims
-        T, N, _ = log_probs.shape
-        input_lengths = torch.full(size=(N,), fill_value=T, dtype=torch.long, device=self.device)
-        target_lengths = torch.as_tensor(list(map(len, labels)), dtype=torch.long, device=self.device)
-        loss = F.ctc_loss(log_probs, targets, input_lengths, target_lengths, blank=self.blank_id, zero_infinity=True)
-        return logits, loss, N

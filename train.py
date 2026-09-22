@@ -28,9 +28,8 @@ from pytorch_lightning.loggers import TensorBoardLogger
 from pytorch_lightning.strategies import DDPStrategy
 from pytorch_lightning.utilities.model_summary import summarize
 
-from indichtr.data.module import SceneTextDataModule
+from indichtr.data.module import IndicHTRDataModule
 from indichtr.models.base import BaseSystem
-from indichtr.models.utils import get_pretrained_weights
 
 
 # Copied from OneCycleLR
@@ -77,12 +76,9 @@ def main(config: DictConfig):
         assert config.model.perm_num % 2 == 0, 'perm_num should be even if perm_mirrored = True'
 
     model: BaseSystem = hydra.utils.instantiate(config.model)
-    # If specified, use pretrained weights to initialize the model
-    if config.pretrained is not None:
-        model.load_state_dict(get_pretrained_weights(config.pretrained))
     print(summarize(model, max_depth=1 if model.hparams.name.startswith('parseq') else 2))
 
-    datamodule: SceneTextDataModule = hydra.utils.instantiate(config.data)
+    datamodule: IndicHTRDataModule = hydra.utils.instantiate(config.data)
 
     checkpoint = ModelCheckpoint(monitor='val_loss', mode='min', save_top_k=3, save_last=True,
                                  filename='{epoch}-{step}-{val_accuracy:.4f}-{val_NED:.4f}-{val_loss:.4f}')

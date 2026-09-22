@@ -25,7 +25,7 @@ from torchvision import transforms as T
 from .dataset import build_tree_dataset, LmdbDataset
 
 
-class SceneTextDataModule(pl.LightningDataModule):
+class IndicHTRDataModule(pl.LightningDataModule):
 
 
 

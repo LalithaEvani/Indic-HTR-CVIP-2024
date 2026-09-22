@@ -5,7 +5,7 @@ from tqdm import tqdm
 import argparse
 from indichtr.models.utils import load_from_checkpoint, parse_model_args
 from nltk import edit_distance
-from indichtr.data.module import SceneTextDataModule
+from indichtr.data.module import IndicHTRDataModule
 import torch
 import numpy as np
 import multiprocessing
@@ -45,14 +45,13 @@ def compute_distances(process_number, words1, words2, start, end, result):
 @torch.inference_mode()
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('checkpoint', help="Model checkpoint (or 'pretrained=<model_id>')")
+    parser.add_argument('checkpoint', help="Path to a trained model checkpoint (.ckpt)")
     parser.add_argument('--device', default='cuda')
     parser.add_argument('--data_root', required=True, help='Path to <lang>/datasets (see Datasets.md)')
     parser.add_argument('--batch_size', type=int, default=512)
     parser.add_argument('--num_workers', type=int, default=4)
     parser.add_argument('--cased', action='store_true', default=False, help='Cased comparison')
     parser.add_argument('--punctuation', action='store_true', default=False, help='Check punctuation')
-    parser.add_argument('--new', action='store_true', default=False, help='Evaluate on new benchmark datasets')
     parser.add_argument('--rotation', type=int, default=0, help='Angle of rotation (counter clockwise) in degrees.')
     parser.add_argument('--test_set', nargs='+', default=['IIIT-INDIC-HW-WORDS'],
                         help="Subdirectory name(s) under <data_root>/test/ to evaluate on")
@@ -61,7 +60,7 @@ def main():
 
     model = load_from_checkpoint(args.checkpoint, **kwargs).eval().to(args.device)
     hp = model.hparams
-    datamodule = SceneTextDataModule(args.data_root, '_unused_', hp.img_size, hp.max_label_length, hp.charset_train,
+    datamodule = IndicHTRDataModule(args.data_root, '_unused_', hp.img_size, hp.max_label_length, hp.charset_train,
                                      hp.charset_test, args.batch_size, args.num_workers, False, rotation=args.rotation)
 
     # Lexicon = every ground-truth label across train + val + test, per Section 4.5.

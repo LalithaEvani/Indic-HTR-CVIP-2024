@@ -26,7 +26,7 @@ import torch
 from tqdm import tqdm
 from nltk import edit_distance
 
-from indichtr.data.module import SceneTextDataModule
+from indichtr.data.module import IndicHTRDataModule
 from indichtr.models.utils import load_from_checkpoint, parse_model_args
 
 
@@ -54,7 +54,7 @@ def print_results_table(results: List[Result], file=None):
 @torch.inference_mode()
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('checkpoint', help="Model checkpoint (or 'pretrained=<model_id>')")
+    parser.add_argument('checkpoint', help="Path to a trained model checkpoint (.ckpt)")
     parser.add_argument('--data_root', required=True, help='Path to <lang>/datasets (see Datasets.md)')
     parser.add_argument('--batch_size', type=int, default=512)
     parser.add_argument('--num_workers', type=int, default=4)
@@ -72,7 +72,7 @@ def main():
 
     model = load_from_checkpoint(args.checkpoint, **kwargs).eval().to(args.device)
     hp = model.hparams
-    datamodule = SceneTextDataModule(args.data_root, '_unused_', hp.img_size, hp.max_label_length, hp.charset_train,
+    datamodule = IndicHTRDataModule(args.data_root, '_unused_', hp.img_size, hp.max_label_length, hp.charset_train,
                                      hp.charset_test, args.batch_size, args.num_workers, False, rotation=args.rotation)
 
     test_set = sorted(set(args.test_set))
