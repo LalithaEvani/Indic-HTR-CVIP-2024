@@ -46,5 +46,5 @@ Each language's data is a **separate root directory** (pass it as `data.root_dir
 `create_lmdb_dataset.py` takes a ground-truth file (`<absolute image path><space><label>` per line, UTF-8) and writes an LMDB:
 
 ```bash
-python create_lmdb_dataset.py --inputPath <unused> --gtFile gt.txt --outputPath <lang>/datasets/train/IIIT-INDIC-HW-WORDS
+python create_lmdb_dataset.py --gtFile gt.txt --outputPath <lang>/datasets/train/IIIT-INDIC-HW-WORDS
 ```

@@ -22,13 +22,12 @@ def writeCache(env, cache):
             txn.put(k, v)
 
 
-def createDataset(inputPath, gtFile, outputPath, checkValid=True):
+def createDataset(gtFile, outputPath, checkValid=True):
     """
     Create LMDB dataset for training and evaluation.
     ARGS:
-        inputPath  : input folder path where starts imagePath
+        gtFile     : ground-truth file, one "<absolute image path> <label>" line per sample
         outputPath : LMDB output path
-        gtFile     : list of image path and label
         checkValid : if true, check the validity of every image
     """
     os.makedirs(outputPath, exist_ok=True)
@@ -43,9 +42,6 @@ def createDataset(inputPath, gtFile, outputPath, checkValid=True):
     nSamples = len(data)
     for i, line in enumerate(data):
         imagePath, label = line.strip().split(maxsplit=1)
-        # print(f'image path before joining{imagePath}')
-        # imagePath = os.path.join(inputPath, imagePath)
-        # print(f'image path after joining {imagePath}')
         with open(imagePath, 'rb') as f:
             imageBin = f.read()
         if checkValid:
@@ -76,13 +72,9 @@ def createDataset(inputPath, gtFile, outputPath, checkValid=True):
     print('Created dataset with %d samples' % nSamples)
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="take paths")
-    parser.add_argument("--inputPath", type=str, required=True, help="path to the input image folder (unused; gtFile lines must already contain absolute image paths)")
+    parser = argparse.ArgumentParser(description="Build an LMDB dataset from a ground-truth file")
     parser.add_argument("--gtFile", type=str, required=True, help='ground-truth file: one "<absolute image path> <label>" line per sample, UTF-8')
     parser.add_argument("--outputPath", type=str, required=True, help="LMDB output directory to create")
 
     args = parser.parse_args()
-    inputPath= args.inputPath
-    gtFile = args.gtFile
-    outputPath = args.outputPath
-    createDataset(inputPath, gtFile, outputPath)
+    createDataset(args.gtFile, args.outputPath)
