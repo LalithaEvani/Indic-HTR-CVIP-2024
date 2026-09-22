@@ -5,23 +5,17 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "strhub"
 version = "1.1.0"
-description = "Scene Text Recognition Model Hub: A collection of deep learning models for Scene Text Recognition"
+description = "PARSeq for Indic handwritten text recognition (CVIP 2024), forked from the Scene Text Recognition Model Hub"
 authors = [
   {name = "Darwin Bautista", email = "baudm@users.noreply.github.com"},
+  {name = "Evani Lalitha"},
 ]
 readme = "README.md"
-requires-python = ">=3.8"
-dynamic = ["optional-dependencies"]
+requires-python = ">=3.9"
 
 [project.urls]
-Homepage = "https://github.com/baudm/parseq"
+Homepage = "https://github.com/LalithaEvani/Indic-HTR-CVIP-2024"
 
 [tool.setuptools]
 packages = ["strhub"]
-license-files = ["NOTICE", "LICENSE", "strhub/models/*/LICENSE"]
-
-[tool.setuptools.dynamic]
-optional-dependencies.train = { file = ["requirements/train.txt"] }
-optional-dependencies.test = { file = ["requirements/test.txt"] }
-optional-dependencies.bench = { file = ["requirements/bench.txt"] }
-optional-dependencies.tune = { file = ["requirements/tune.txt"] }
+license-files = ["NOTICE", "LICENSE"]

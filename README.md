@@ -8,15 +8,15 @@ This codebase is a fork of [PARSeq](https://github.com/baudm/parseq); see `NOTIC
 
 ## Installation
 
-Requires Python >= 3.9 and PyTorch >= 1.10 (this repo was developed/tested against `torch==1.13.1`, matching `requirements/core.txt`).
+Requires Python >= 3.9. See `requirements.txt` for the exact package versions this was verified against.
 
 ```bash
 conda create -n parseq python=3.9
 conda activate parseq
-# Use specific platform build. Other PyTorch 1.13 options: cu116, cu117, rocm5.2
-platform=cu117
-make torch-${platform}
-pip install -r requirements/core.${platform}.txt -e .[train,test]
+# Install the PyTorch build matching your CUDA version first, e.g.:
+pip install torch==1.13.1 torchvision==0.14.1 --extra-index-url https://download.pytorch.org/whl/cu117
+pip install -r requirements.txt
+pip install -e .
 ```
 
 ## Dataset

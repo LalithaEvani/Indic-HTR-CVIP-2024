@@ -1,0 +1,25 @@
+# Verified working versions (this exact set trains/evaluates successfully
+# against the real IIIT-INDIC-HW-WORDS data -- see git history for details).
+#
+# torch/torchvision: install the CUDA build matching your system, e.g.:
+#   pip install torch==1.13.1 torchvision==0.14.1 --extra-index-url https://download.pytorch.org/whl/cu117
+# then install the rest of this file.
+torch==1.13.1
+torchvision==0.14.1
+
+hydra-core==1.3.2
+omegaconf==2.3.0
+pytorch-lightning==1.9.5
+timm==0.9.5
+
+lmdb==1.4.1
+Pillow==10.0.0
+imgaug==0.4.0
+
+numpy==1.25.2
+nltk==3.8.1
+tqdm==4.67.1
+PyYAML==6.0.1
+
+matplotlib==3.7.2
+tensorboard==2.12.1
