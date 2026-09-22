@@ -2,6 +2,8 @@
 # Scene Text Recognition Model Hub
 # Copyright 2022 Darwin Bautista
 #
+# Modifications Copyright 2024 Evani Lalitha, CVIT, IIIT Hyderabad
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
