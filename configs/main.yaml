@@ -1,7 +1,7 @@
 defaults:
   - _self_
   - model: parseq
-  - charset: bengali
+  - charset: ???  # required: charset=<hindi|bengali|telugu|tamil|gujarati|punjabi|oriya|kannada|malayalam|urdu>
   - dataset: real
 
 model:
@@ -9,16 +9,18 @@ model:
   img_size: [ 32, 128 ]  # [ height, width ]
   max_label_length: 35
   # The ordering in charset_train matters. It determines the token IDs assigned to each character.
+  # Both charset_train and charset_test are set by the required charset=<language> group above.
   charset_train: ???
-  # For charset_test, ordering doesn't matter.
-  charset_test: bengali
+  charset_test: ???
   batch_size: 254
   weight_decay: 0.0
   warmup_pct: 0.075  # equivalent to 1.5 epochs of warm up
 
 data:
   _target_: strhub.data.module.SceneTextDataModule
-  root_dir: data
+  # No single shared root across languages -- always pass your own, e.g.
+  # data.root_dir=<path to <lang>/datasets> (see Datasets.md).
+  root_dir: ???
   train_dir: ???
   batch_size: ${model.batch_size}
   img_size: ${model.img_size}

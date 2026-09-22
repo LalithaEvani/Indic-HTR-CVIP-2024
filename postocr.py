@@ -76,7 +76,7 @@ def main():
     pred_labels = []
     max_width = max(map(len, test_set))
     for name, dataloader in datamodule.test_dataloaders(test_set).items():
-        for _,imgs, labels in tqdm(iter(dataloader), desc=f'{name:>{max_width}}'):
+        for imgs, labels in tqdm(iter(dataloader), desc=f'{name:>{max_width}}'):
             res_dict = model.test_step((imgs.to(model.device), labels), -1)
             res = res_dict['output']
             ground_truth.extend(labels)

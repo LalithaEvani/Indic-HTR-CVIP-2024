@@ -53,10 +53,9 @@ This uses the defaults already set in `configs/model/parseq.yaml`: `perm_num=6` 
 Per Section 4.1, these languages were fine-tuned at a higher permutation count and dropout, with a lower learning rate:
 
 ```bash
-./train.py +experiment=parseq charset=<language> \
+./train.py +experiment=parseq-finetune charset=<language> \
   data.root_dir=<path to <lang>/datasets> data.train_dir=IIIT-INDIC-HW-WORDS \
-  model.batch_size=254 model.perm_num=14 model.dropout=0.4 model.lr=7e-6 \
-  trainer.accelerator=gpu trainer.devices=4 \
+  model.batch_size=254 trainer.accelerator=gpu trainer.devices=4 \
   ckpt_path=<path to that language's baseline checkpoint>
 ```
 
@@ -92,12 +91,6 @@ Section 4.2/4.6 describe a two-stage approach: pretrain on a printed-text datase
 ```bash
 python postocr.py <path to checkpoint>.ckpt --data_root=<path to <lang>/datasets>
 ```
-
-## Qualitative comparisons (Fig. 4, 5)
-
-- `test_combined.py` dumps every test image to disk (named by its LMDB record index) and logs per-sample predictions/confidence/CER against that index — used to build the qualitative prediction tables (Fig. 4).
-- `crnn_compare.py` → `parseq_crnn_compare.py` → `final_compare_crnn.py` build the CNN-RNN vs. PARSeq comparison (Fig. 5). These are single-language, edit-the-language-constant-at-top scripts (not CLI-parameterized) and expect CRNN baseline predictions as JSON, produced separately (not part of this repo).
-- `crnn_par_visual_comp.py` (`--language`, `--checkpoint`) is CLI-parameterized; see the docstring at the top of the file for the expected input JSON layout.
 
 ## Citation
 

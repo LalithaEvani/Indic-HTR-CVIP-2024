@@ -242,5 +242,5 @@ class LmdbDataset(Dataset):
         if self.transform is not None:
             img = self.transform(img)
 
-        return index, img, label
+        return img, label
 

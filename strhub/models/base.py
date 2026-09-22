@@ -100,11 +100,7 @@ class BaseSystem(pl.LightningModule, ABC):
         optimizer.zero_grad(set_to_none=True)
 
     def _eval_step(self, batch, validation: bool) -> Optional[STEP_OUTPUT]:
-        # LmdbDataset yields (index, image, label) when driven directly by the
-        # PL trainer (e.g. validation during train.py); test.py/postocr.py
-        # already discard the index themselves and pass a plain (images, labels)
-        # tuple here, so accept either shape.
-        _, images, labels = batch if len(batch) == 3 else (None, *batch)
+        images, labels = batch
         pred_labels=[]
         correct = 0
         total = 0

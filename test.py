@@ -17,7 +17,6 @@
 # limitations under the License.
 
 import argparse
-import string
 import sys
 from dataclasses import dataclass
 from typing import List
@@ -25,6 +24,7 @@ from typing import List
 import torch
 
 from tqdm import tqdm
+from nltk import edit_distance
 
 from strhub.data.module import SceneTextDataModule
 from strhub.models.utils import load_from_checkpoint, parse_model_args
@@ -35,7 +35,7 @@ class Result:
     dataset: str
     num_samples: int
     accuracy: float
-    ned: float
+    cer: float
     confidence: float
     label_length: float
     wer : float
@@ -43,27 +43,12 @@ class Result:
 
 def print_results_table(results: List[Result], file=None):
     w = max(map(len, map(getattr, results, ['dataset'] * len(results))))
-    w = max(w, len('Dataset'), len('Combined'))
-    print('| {:<{w}} | # samples | Accuracy | 1 - NED | Confidence | Label Length |      WER |'.format('Dataset', w=w), file=file)
+    w = max(w, len('Dataset'))
+    print('| {:<{w}} | # samples | Accuracy |     CER | Confidence | Label Length |      WER |'.format('Dataset', w=w), file=file)
     print('|:{:-<{w}}:|----------:|---------:|--------:|-----------:|-------------:|---------:|'.format('----', w=w), file=file)
-    c = Result('Combined', 0, 0, 0, 0, 0, 0)
     for res in results:
-        c.num_samples += res.num_samples
-        c.accuracy += res.num_samples * res.accuracy
-        c.ned += res.num_samples * res.ned
-        c.confidence += res.num_samples * res.confidence
-        c.label_length += res.num_samples * res.label_length
-        c.wer += res.num_samples * res.wer
-        print(f'| {res.dataset:<{w}} | {res.num_samples:>9} | {res.accuracy:>8.2f} | {res.ned:>7.2f} '
+        print(f'| {res.dataset:<{w}} | {res.num_samples:>9} | {res.accuracy:>8.2f} | {res.cer:>7.2f} '
               f'| {res.confidence:>10.2f} | {res.label_length:>12.2f} | {res.wer:>8.2f} |', file=file)
-    c.accuracy /= c.num_samples
-    c.ned /= c.num_samples
-    c.confidence /= c.num_samples
-    c.label_length /= c.num_samples
-    c.wer /= c.num_samples
-    print('|-{:-<{w}}-|-----------|----------|---------|------------|--------------|----------|'.format('----', w=w), file=file)
-    print(f'| {c.dataset:<{w}} | {c.num_samples:>9} | {c.accuracy:>8.2f} | {c.ned:>7.2f} '
-          f'| {c.confidence:>10.2f} | {c.label_length:>12.2f} | {res.wer:>8.2f} | ', file=file)
 
 
 @torch.inference_mode()
@@ -75,7 +60,6 @@ def main():
     parser.add_argument('--num_workers', type=int, default=4)
     parser.add_argument('--cased', action='store_true', default=False, help='Cased comparison')
     parser.add_argument('--punctuation', action='store_true', default=False, help='Check punctuation')
-    parser.add_argument('--new', action='store_true', default=False, help='Evaluate on new benchmark datasets')
     parser.add_argument('--rotation', type=int, default=0, help='Angle of rotation (counter clockwise) in degrees.')
     parser.add_argument('--device', default='cuda')
     parser.add_argument('--test_set', nargs='+', default=['IIIT-INDIC-HW-WORDS'],
@@ -98,36 +82,29 @@ def main():
     for name, dataloader in datamodule.test_dataloaders(test_set).items():
         total = 0
         correct = 0
-        ned = 0
+        cer = 0
         confidence = 0
         label_length = 0
-        for _,imgs, labels in tqdm(iter(dataloader), desc=f'{name:>{max_width}}'):
+        for imgs, labels in tqdm(iter(dataloader), desc=f'{name:>{max_width}}'):
             res_dict = model.test_step((imgs.to(model.device), labels), -1)
             res = res_dict['output']
             #print('res: ', res_dict)
             total += res.num_samples
             correct += res.correct
-            ned += res.ned
+            # Per Section 4.4/Eq. 8, CER = mean over samples of edit_distance(pred, gt) / len(gt).
+            cer += sum(edit_distance(pred, gt) / len(gt) for pred, gt in zip(res.pred_labels, labels))
             confidence += res.confidence
             label_length += res.label_length
         accuracy = 100 * correct / total
-        mean_ned = 100 * (1 - ned / total)
+        mean_cer = 100 * cer / total
         mean_conf = 100 * confidence / total
         mean_label_length = label_length / total
         wer = 100 - accuracy
-        results[name] = Result(name, total, accuracy, mean_ned, mean_conf, mean_label_length, wer)
+        results[name] = Result(name, total, accuracy, mean_cer, mean_conf, mean_label_length, wer)
 
-    result_groups = {
-        'Benchmark (Subset)': test_set
-    }
-    if args.new:
-        result_groups.update({'New': SceneTextDataModule.TEST_NEW})
     with open(args.checkpoint + '.log.txt', 'w') as f:
         for out in [f, sys.stdout]:
-            for group, subset in result_groups.items():
-                print(f'{group} set:', file=out)
-                print_results_table([results[s] for s in subset], out)
-                print('\n', file=out)
+            print_results_table([results[s] for s in test_set], out)
 
 
 if __name__ == '__main__':
