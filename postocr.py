@@ -9,8 +9,7 @@ from indichtr.data.module import IndicHTRDataModule
 import torch
 import numpy as np
 import multiprocessing
-from nltk.metrics import edit_distance
-import nltk
+
 
 def create_lexicon(root_path, lexicon_list):
     # Mirrors indichtr.data.dataset.build_tree_dataset: the LMDB(s) may be
@@ -34,14 +33,12 @@ def compute_distances(process_number, words1, words2, start, end, result):
     print(f'process number : {process_number} start index: {start}')
     partial_result = []
     for i in tqdm(range(start, end), desc=f'process {process_number} completing start {start} and end {end}'):
-        distances = []
-        for word2 in words2:
-            # print(f'words1 : {words1[i]} words2: {word2}')
-            # print(f'edit distance {edit_distance(words1[i], word2)}')
-            distances.append(edit_distance(words1[i], word2))
+        distances = [edit_distance(words1[i], word2) for word2 in words2]
         partial_result.append(distances)
     result[start:end] = partial_result
     print(f'process number : {process_number} end index: {end} completed')
+
+
 @torch.inference_mode()
 def main():
     parser = argparse.ArgumentParser()
@@ -83,15 +80,13 @@ def main():
 
 
     words1 = pred_labels
-    words2 = lexicon_list 
+    words2 = lexicon_list
     num_words1 = len(words1)
-    num_words2 = len(words2)
 
     # Shared memory array to store results
     manager = multiprocessing.Manager()
     result = manager.list([None] * num_words1)
 
-    # num_processes = multiprocessing.cpu_count()
     num_processes = min(multiprocessing.cpu_count(), 15)
     chunk_size = (num_words1 + num_processes - 1) // num_processes  # Divide work evenly
 
@@ -106,71 +101,37 @@ def main():
     for process in processes:
         process.join()
 
-    distances_matrix = list(result)
-    print(f'distance matrix computed shape {len(distances_matrix)}')
-    # print(f'distance matrix 5,5: {np.array(distances_matrix)[0:5, 0:5]}')
-    # np.save('lex_edit_distance_hindi.npy', distances_matrix)
-    # print('saved the matrix')
+    # matrix[i][j] is the edit distance between prediction i and lexicon word j.
+    matrix = list(result)
+    print(f'distance matrix computed shape {len(matrix)}')
 
-
-
-    # distance_matrix_file_path = 'lex_edit_distance.npy'
-    # matrix = np.load(distance_matrix_file_path, allow_pickle=True)
-    matrix = distances_matrix
-
-    # lexicon_list_file_path = 'lexicon_list_hindi.npy'
-    # lexicon_list = np.load(lexicon_list_file_path, allow_pickle=True)
-
-    # pred_labels_file_path = 'pred_label_list_hindi.npy'
-    # pred_labels = np.load(pred_labels_file_path, allow_pickle=True)
-
-    # ground_truth_file_path= 'ground_truth_hindi.npy'
-    # ground_truth = np.load(ground_truth_file_path, allow_pickle=True)
-    # print(f'matrix (5,5) : {matrix[0:5, 0:5]}')
     recall = 5
-    print(f'shape of matrix [pred,lexicon]{np.array(matrix).shape}')
-    for k in range(1, recall+1):    
+    for k in range(1, recall + 1):
         cer = 0
         correct = 0
-        for i in tqdm(range(len(matrix)), desc='pred words'):#for every row or every predicted label 
-        # for i in range(10):
-            row_index_list = list(enumerate(matrix[i]))#create a list containing index and edit distance
-            # print(f'for i {i}, row index list {row_index_list[0:5]}')  
-            sorted_row_index_list = sorted(row_index_list, key=lambda x: x[1])#sort the edit distance and preserve the index 
-            # print(f'for i {i}, sorted row index list {sorted_row_index_list[0:5]}')  
-            sorted_row_indices = [x[0] for x in sorted_row_index_list]#obtain only the indices after sorting so that first indices contain low edit distance values 
-            # print(f'for i {i}, sorted row indices {sorted_row_indices[0:5]}')  
-            edit_distance_correct_gt = None
+        # For each prediction, take the k lexicon words with the least edit
+        # distance and keep whichever of those k is closest to the ground
+        # truth -- this is Recall@k from Section 4.5/Table 3.
+        for i in tqdm(range(len(matrix)), desc='pred words'):
+            sorted_indices = [idx for idx, _ in sorted(enumerate(matrix[i]), key=lambda x: x[1])]
             min_ed_correct_gt = np.inf
             final_pred = None
-            for j in range(k):#for the recall number 
-                corrected_word = lexicon_list[sorted_row_indices[j]]#get the least edit distance words one by one 
-
-                # print(f'for j {j}, corrected word {corrected_word} lexicon list {lexicon_list[sorted_row_indices[0:5]]}')  
-
-                
-                #if recall is 2 then it is done for the first two words in the index list which have least edit distance 
-                edit_distance_correct_gt = edit_distance(ground_truth[i], corrected_word)#calculate the edit distance 
-                # print(f'for pred word {pred_labels[i]} for recall {recall} for number recall {j+1} the corrected word {corrected_word} edit distance {edit_distance_correct_gt}')
-                #since we need least edit distance even in the case of recall for final cer calculation 
-                if edit_distance_correct_gt < min_ed_correct_gt:#so retain only one value
+            for j in range(k):
+                corrected_word = lexicon_list[sorted_indices[j]]
+                edit_distance_correct_gt = edit_distance(ground_truth[i], corrected_word)
+                if edit_distance_correct_gt < min_ed_correct_gt:
                     min_ed_correct_gt = edit_distance_correct_gt
                     final_pred = corrected_word
-                
-            cer += min_ed_correct_gt/len(ground_truth[i])#after all this the final edit distance for that particular predicted label is in min_ed_correct_gt
-            if final_pred == ground_truth[i]:
-                correct+=1
 
-        final_cer = cer/ len(pred_labels)
+            cer += min_ed_correct_gt / len(ground_truth[i])
+            if final_pred == ground_truth[i]:
+                correct += 1
+
+        final_cer = cer / len(pred_labels)
         wrr = correct / len(pred_labels)
-        wer = 100 - wrr*100
+        wer = 100 - wrr * 100
         print(f' final cer for recall {k} is : {final_cer*100}')
         print(f' wer for recall {k} is : {wer}')
-        # print(f' unique words in lexicon list: {len(set(lexicon_list))}')
-
-
-
-        # distances_matrix is now a matrix where distances_matrix[i][j] is the edit distance between words1[i] and words2[j]
 
 
 if __name__ == '__main__':
