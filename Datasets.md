@@ -2,7 +2,7 @@ We use **IIIT-INDIC-HW-WORDS**:
 
 > Gongidi, S., Jawahar, C.: iiit-indic-hw-words: A dataset for indic handwritten text recognition. In: Document Analysis and Recognition–ICDAR 2021: 16th International Conference, Lausanne, Switzerland, September 5-10, 2021, Proceedings, Part IV 16. pp. 444–459. Springer (2021)
 
-Word-level handwritten images for ten languages, converted to LMDB (`create_dataset_lmdb_lalitha.py` in [`tools/`](tools)) with keys `image-%09d` / `label-%09d` (see `strhub/data/dataset.py:LmdbDataset`).
+Word-level handwritten images for ten languages, converted to LMDB (`create_lmdb_dataset.py` in [`tools/`](tools)) with keys `image-%09d` / `label-%09d` (see `strhub/data/dataset.py:LmdbDataset`).
 
 ## Per-language statistics (Table 1 of the paper)
 
@@ -43,8 +43,8 @@ Each language's data is a **separate root directory** (pass it as `data.root_dir
 
 ## Building an LMDB from raw images
 
-`tools/create_dataset_lmdb_lalitha.py` takes a ground-truth file (`<absolute image path><space><label>` per line, UTF-8) and writes an LMDB:
+`tools/create_lmdb_dataset.py` takes a ground-truth file (`<absolute image path><space><label>` per line, UTF-8) and writes an LMDB:
 
 ```bash
-python tools/create_dataset_lmdb_lalitha.py --inputPath <unused> --gtFile gt.txt --outputPath <lang>/datasets/train/IIIT-INDIC-HW-WORDS
+python tools/create_lmdb_dataset.py --inputPath <unused> --gtFile gt.txt --outputPath <lang>/datasets/train/IIIT-INDIC-HW-WORDS
 ```
