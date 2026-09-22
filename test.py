@@ -88,7 +88,6 @@ def main():
         for imgs, labels in tqdm(iter(dataloader), desc=f'{name:>{max_width}}'):
             res_dict = model.test_step((imgs.to(model.device), labels), -1)
             res = res_dict['output']
-            #print('res: ', res_dict)
             total += res.num_samples
             correct += res.correct
             # Per Section 4.4/Eq. 8, CER = mean over samples of edit_distance(pred, gt) / len(gt).

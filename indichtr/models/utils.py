@@ -3,21 +3,9 @@ from typing import Sequence
 from torch import nn
 
 
-class InvalidModelError(RuntimeError):
-    """Exception raised for any model-related error (creation, loading)"""
-
-
-def _get_model_class(key):
-    if 'parseq' in key:
-        from .parseq.system import PARSeq as ModelClass
-    else:
-        raise InvalidModelError(f"Unable to find model class for '{key}'")
-    return ModelClass
-
-
 def load_from_checkpoint(checkpoint_path: str, **kwargs):
-    ModelClass = _get_model_class(checkpoint_path)
-    return ModelClass.load_from_checkpoint(checkpoint_path, **kwargs)
+    from .parseq.system import PARSeq
+    return PARSeq.load_from_checkpoint(checkpoint_path, **kwargs)
 
 
 def parse_model_args(args):
