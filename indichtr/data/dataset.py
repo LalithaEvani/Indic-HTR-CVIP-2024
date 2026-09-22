@@ -26,7 +26,7 @@ import lmdb
 from PIL import Image
 from torch.utils.data import Dataset, ConcatDataset
 
-from strhub.data.utils import CharsetAdapter
+from indichtr.data.utils import CharsetAdapter
 
 log = logging.getLogger(__name__)
 

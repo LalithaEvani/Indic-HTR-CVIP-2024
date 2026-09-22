@@ -3,7 +3,7 @@ requires = ["setuptools", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "strhub"
+name = "indichtr"
 version = "1.1.0"
 description = "PARSeq for Indic handwritten text recognition (CVIP 2024), forked from the Scene Text Recognition Model Hub"
 authors = [
@@ -17,5 +17,5 @@ requires-python = ">=3.9"
 Homepage = "https://github.com/LalithaEvani/Indic-HTR-CVIP-2024"
 
 [tool.setuptools]
-packages = ["strhub"]
+packages = ["indichtr"]
 license-files = ["NOTICE", "LICENSE"]

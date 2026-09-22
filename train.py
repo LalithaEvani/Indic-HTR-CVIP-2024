@@ -28,9 +28,9 @@ from pytorch_lightning.loggers import TensorBoardLogger
 from pytorch_lightning.strategies import DDPStrategy
 from pytorch_lightning.utilities.model_summary import summarize
 
-from strhub.data.module import SceneTextDataModule
-from strhub.models.base import BaseSystem
-from strhub.models.utils import get_pretrained_weights
+from indichtr.data.module import SceneTextDataModule
+from indichtr.models.base import BaseSystem
+from indichtr.models.utils import get_pretrained_weights
 
 
 # Copied from OneCycleLR

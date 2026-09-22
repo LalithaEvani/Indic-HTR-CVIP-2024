@@ -26,8 +26,8 @@ import torch
 from tqdm import tqdm
 from nltk import edit_distance
 
-from strhub.data.module import SceneTextDataModule
-from strhub.models.utils import load_from_checkpoint, parse_model_args
+from indichtr.data.module import SceneTextDataModule
+from indichtr.models.utils import load_from_checkpoint, parse_model_args
 
 
 @dataclass

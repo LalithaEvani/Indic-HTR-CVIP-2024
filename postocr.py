@@ -3,9 +3,9 @@ import lmdb
 from pathlib import Path
 from tqdm import tqdm
 import argparse
-from strhub.models.utils import load_from_checkpoint, parse_model_args
+from indichtr.models.utils import load_from_checkpoint, parse_model_args
 from nltk import edit_distance
-from strhub.data.module import SceneTextDataModule
+from indichtr.data.module import SceneTextDataModule
 import torch
 import numpy as np
 import multiprocessing
@@ -13,7 +13,7 @@ from nltk.metrics import edit_distance
 import nltk
 
 def create_lexicon(root_path, lexicon_list):
-    # Mirrors strhub.data.dataset.build_tree_dataset: the LMDB(s) may be
+    # Mirrors indichtr.data.dataset.build_tree_dataset: the LMDB(s) may be
     # nested under root_path rather than root_path itself being one.
     word_num = 0
     for mdb in glob.glob(str(Path(root_path) / '**/data.mdb'), recursive=True):

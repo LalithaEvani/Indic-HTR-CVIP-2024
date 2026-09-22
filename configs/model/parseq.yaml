@@ -1,5 +1,5 @@
 name: parseq
-_target_: strhub.models.parseq.system.PARSeq
+_target_: indichtr.models.parseq.system.PARSeq
 
 # Data
 patch_size: [ 4, 8 ]  # [ height, width ]

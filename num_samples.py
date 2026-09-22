@@ -1,4 +1,4 @@
-from strhub.data.dataset import LmdbDataset
+from indichtr.data.dataset import LmdbDataset
 import argparse
 import yaml
 import os

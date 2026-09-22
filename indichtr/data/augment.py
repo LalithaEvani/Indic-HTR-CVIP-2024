@@ -22,7 +22,7 @@ import numpy as np
 from PIL import ImageFilter, Image
 from timm.data import auto_augment
 
-from strhub.data import aa_overrides
+from indichtr.data import aa_overrides
 
 aa_overrides.apply()
 

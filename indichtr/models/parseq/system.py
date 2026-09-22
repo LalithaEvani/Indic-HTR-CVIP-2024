@@ -29,8 +29,8 @@ from torch import Tensor
 from pytorch_lightning.utilities.types import STEP_OUTPUT
 from timm.models.helpers import named_apply
 
-from strhub.models.base import CrossEntropySystem
-from strhub.models.utils import init_weights
+from indichtr.models.base import CrossEntropySystem
+from indichtr.models.utils import init_weights
 from .modules import DecoderLayer, Decoder, Encoder, TokenEmbedding
 
 

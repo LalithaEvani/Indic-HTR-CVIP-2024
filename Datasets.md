@@ -2,7 +2,7 @@ We use **IIIT-INDIC-HW-WORDS**:
 
 > Gongidi, S., Jawahar, C.: iiit-indic-hw-words: A dataset for indic handwritten text recognition. In: Document Analysis and Recognition–ICDAR 2021: 16th International Conference, Lausanne, Switzerland, September 5-10, 2021, Proceedings, Part IV 16. pp. 444–459. Springer (2021)
 
-Word-level handwritten images for ten languages, converted to LMDB (`create_lmdb_dataset.py`) with keys `image-%09d` / `label-%09d` (see `strhub/data/dataset.py:LmdbDataset`).
+Word-level handwritten images for ten languages, converted to LMDB (`create_lmdb_dataset.py`) with keys `image-%09d` / `label-%09d` (see `indichtr/data/dataset.py:LmdbDataset`).
 
 ## Per-language statistics (Table 1 of the paper)
 
@@ -39,7 +39,7 @@ Each language's data is a **separate root directory** (pass it as `data.root_dir
         └── lock.mdb
 ```
 
-`strhub/data/dataset.py:build_tree_dataset` finds LMDBs by recursively globbing for `data.mdb` under the given root, so the `IIIT-INDIC-HW-WORDS` subdirectory name isn't load-bearing — what matters is `data.train_dir` (passed to `train.py`) pointing at the right subdirectory under `<root>/train`.
+`indichtr/data/dataset.py:build_tree_dataset` finds LMDBs by recursively globbing for `data.mdb` under the given root, so the `IIIT-INDIC-HW-WORDS` subdirectory name isn't load-bearing — what matters is `data.train_dir` (passed to `train.py`) pointing at the right subdirectory under `<root>/train`.
 
 ## Building an LMDB from raw images
 
