@@ -83,7 +83,6 @@ class PositionAttention(nn.Module):
         k = self.k_decoder[-1](k)
 
         # calculate query vector
-        # TODO q=f(q,k)
         zeros = x.new_zeros((self.max_length, N, E))  # (T, N, E)
         q = self.pos_encoder(zeros)  # (T, N, E)
         q = q.permute(1, 0, 2)  # (N, T, E)

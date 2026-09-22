@@ -1,27 +1,32 @@
+import glob
 import lmdb
+from pathlib import Path
 from tqdm import tqdm
 import argparse
 from strhub.models.utils import load_from_checkpoint, parse_model_args
-from nltk import edit_distance 
+from nltk import edit_distance
 from strhub.data.module import SceneTextDataModule
-import torch 
+import torch
 import numpy as np
 import multiprocessing
 from nltk.metrics import edit_distance
 import nltk
 
-def create_lexicon(folder_path, lexicon_list):
-    env_data = lmdb.open(folder_path, readonly=True)
-    txn_data = env_data.begin()
-    cursor_data = txn_data.cursor()
+def create_lexicon(root_path, lexicon_list):
+    # Mirrors strhub.data.dataset.build_tree_dataset: the LMDB(s) may be
+    # nested under root_path rather than root_path itself being one.
     word_num = 0
-    for key, value in tqdm(cursor_data, desc='gathering the lexicon'):
-        if key.startswith(b'label-'):
-            label_value = value.decode().strip()
-            word_num+=1
-            
-            if label_value not in lexicon_list:
-                lexicon_list.append(label_value)
+    for mdb in glob.glob(str(Path(root_path) / '**/data.mdb'), recursive=True):
+        lmdb_dir = str(Path(mdb).parent)
+        env_data = lmdb.open(lmdb_dir, readonly=True)
+        txn_data = env_data.begin()
+        cursor_data = txn_data.cursor()
+        for key, value in tqdm(cursor_data, desc=f'gathering the lexicon from {lmdb_dir}'):
+            if key.startswith(b'label-'):
+                label_value = value.decode().strip()
+                word_num += 1
+                if label_value not in lexicon_list:
+                    lexicon_list.append(label_value)
     print(f'number of words in dataset: {word_num}')
     return lexicon_list
 
@@ -49,24 +54,23 @@ def main():
     parser.add_argument('--punctuation', action='store_true', default=False, help='Check punctuation')
     parser.add_argument('--new', action='store_true', default=False, help='Evaluate on new benchmark datasets')
     parser.add_argument('--rotation', type=int, default=0, help='Angle of rotation (counter clockwise) in degrees.')
+    parser.add_argument('--test_set', nargs='+', default=['IIIT-INDIC-HW-WORDS'],
+                        help="Subdirectory name(s) under <data_root>/test/ to evaluate on")
     args, unknown = parser.parse_known_args()
-    kwargs = parse_model_args(unknown) 
-    
+    kwargs = parse_model_args(unknown)
+
     model = load_from_checkpoint(args.checkpoint, **kwargs).eval().to(args.device)
     hp = model.hparams
     datamodule = SceneTextDataModule(args.data_root, '_unused_', hp.img_size, hp.max_label_length, hp.charset_train,
                                      hp.charset_test, args.batch_size, args.num_workers, False, rotation=args.rotation)
 
+    # Lexicon = every ground-truth label across train + val + test, per Section 4.5.
     lexicon_list = []
-    train_folder_path = 'data/train/real/bengali'
-    val_folder_path = 'data/val/bengali'
-    test_folder_path = 'data/test/bengali'
-    lexicon_list = []
-    lexicon_list = create_lexicon(train_folder_path, lexicon_list)
-    lexicon_list = create_lexicon(val_folder_path, lexicon_list)
-    lexicon_list = create_lexicon(test_folder_path, lexicon_list)
+    lexicon_list = create_lexicon(f'{args.data_root}/train', lexicon_list)
+    lexicon_list = create_lexicon(f'{args.data_root}/val', lexicon_list)
+    lexicon_list = create_lexicon(f'{args.data_root}/test', lexicon_list)
     print(f'length of lexicon list {len(lexicon_list)}')
-    test_set = ['bengali']
+    test_set = sorted(set(args.test_set))
 
     ground_truth = []
     pred_labels = []

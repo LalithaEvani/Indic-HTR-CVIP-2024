@@ -28,7 +28,7 @@ class ABINetIterModel(nn.Module):
         for _ in range(self.iter_size):
             tokens = torch.softmax(a_res['logits'], dim=-1)
             lengths = a_res['pt_lengths']
-            lengths.clamp_(2, self.language.max_length)  # TODO:move to langauge model
+            lengths.clamp_(2, self.language.max_length)
             l_res = self.language(tokens, lengths)
             all_l_res.append(l_res)
             a_res = self.alignment(l_res['feature'], v_res['feature'])
