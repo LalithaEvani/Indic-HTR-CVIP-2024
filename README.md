@@ -98,4 +98,6 @@ Apache License 2.0 (see `LICENSE`). See `NOTICE` for upstream attribution — th
 
 ## Acknowledgments
 
+This work is supported by MeitY, Government of India, through the NLTM-Bhashini project.
+
 All code in this repository was written by the authors. Claude (Anthropic) assisted with reviewing, cleaning up, and reorganizing the codebase for this public release.
