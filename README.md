@@ -1,6 +1,6 @@
 # Indic-HTR-CVIP-2024
 
-Code for **"Enhancing Accuracy in Indic Handwritten Text Recognition"** (Evani Lalitha, Ajoy Mondal, C. V. Jawahar — CVIT, IIIT Hyderabad), accepted at [CVIP 2024](https://link.springer.com/chapter/10.1007/978-3-031-93688-3_17).
+Code for **"Enhancing Accuracy in Indic Handwritten Text Recognition"** (Evani Lalitha, Ajoy Mondal, C. V. Jawahar — CVIT, IIIT Hyderabad), accepted at [CVIP 2024](https://link.springer.com/chapter/10.1007/978-3-031-93688-3_17). See the [project page](https://lalithaevani.github.io/Indic-HTR-CVIP-2024-page/) for the abstract, method overview, and results.
 
 We fine-tune [PARSeq](https://github.com/baudm/parseq) (Bautista & Atienza, ECCV 2022) — a permuted autoregressive sequence transformer originally built for scene text recognition — for handwritten text recognition across ten Indic languages: **Hindi, Bengali, Telugu, Tamil, Gujarati, Gurumukhi, Oriya, Kannada, Malayalam, and Urdu**. We also apply lexicon-based post-OCR error correction.
 
