@@ -4,7 +4,7 @@ We use **IIIT-INDIC-HW-WORDS**:
 
 Word-level handwritten images for ten languages, converted to LMDB (`create_lmdb_dataset.py`) with keys `image-%09d` / `label-%09d` (see `indichtr/data/dataset.py:LmdbDataset`).
 
-## Per-language statistics (Table 1 of the paper)
+## Per-language statistics
 
 | Script     | #Writers | #Word Instances | Lexicon Size | #Train | #Val   | #Test  |
 |:----------:|---------:|-----------------:|--------------:|-------:|-------:|-------:|

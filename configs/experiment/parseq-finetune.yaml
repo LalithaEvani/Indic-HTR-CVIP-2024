@@ -1,7 +1,6 @@
 # @package _global_
-# Fine-tuning regime used for Bengali, Gujarati, Gurumukhi, Kannada, Odia,
-# and Malayalam (Section 4.1 of the paper). Requires ckpt_path=<path to that
-# language's baseline checkpoint> to actually resume from.
+# Fine-tuning preset: higher permutation count and dropout, lower learning
+# rate. Requires ckpt_path=<path to a baseline checkpoint> to resume from.
 defaults:
   - override /model: parseq
 

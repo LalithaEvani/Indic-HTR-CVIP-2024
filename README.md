@@ -2,7 +2,7 @@
 
 Code for **"Enhancing Accuracy in Indic Handwritten Text Recognition"** (Evani Lalitha, Ajoy Mondal, C. V. Jawahar — CVIT, IIIT Hyderabad), accepted at [CVIP 2024](https://link.springer.com/chapter/10.1007/978-3-031-93688-3_17).
 
-We fine-tune [PARSeq](https://github.com/baudm/parseq) (Bautista & Atienza, ECCV 2022) — a permuted autoregressive sequence transformer originally built for scene text recognition — for handwritten text recognition across ten Indic languages: **Hindi, Bengali, Telugu, Tamil, Gujarati, Gurumukhi, Oriya, Kannada, Malayalam, and Urdu**. We also investigate transfer learning from printed to handwritten text and apply lexicon-based post-OCR error correction.
+We fine-tune [PARSeq](https://github.com/baudm/parseq) (Bautista & Atienza, ECCV 2022) — a permuted autoregressive sequence transformer originally built for scene text recognition — for handwritten text recognition across ten Indic languages: **Hindi, Bengali, Telugu, Tamil, Gujarati, Gurumukhi, Oriya, Kannada, Malayalam, and Urdu**. We also apply lexicon-based post-OCR error correction.
 
 This codebase is a fork of [PARSeq](https://github.com/baudm/parseq); see `NOTICE`/`LICENSE` for upstream attribution.
 
@@ -36,9 +36,7 @@ Each language's data is a separate root directory with the following structure:
 
 ## Training
 
-Implementation details (Section 4.1 of the paper): 4 GPUs, ~160,000 iterations, batch size 254, patch size 8×4, 1-cycle LR scheduler for pretraining + SWA scheduler with Adam for training, max label length 35.
-
-### Baseline (Hindi, Telugu, Tamil, Urdu)
+Implementation details: 4 GPUs, ~160,000 iterations, batch size 254, patch size 8×4, 1-cycle LR scheduler for pretraining + SWA scheduler with Adam for training, max label length 35.
 
 ```bash
 ./train.py +experiment=parseq charset=<language> \
@@ -48,35 +46,7 @@ Implementation details (Section 4.1 of the paper): 4 GPUs, ~160,000 iterations, 
 
 This uses the defaults already set in `configs/model/parseq.yaml`: `perm_num=6` (K=6), `dropout=0.1`, `lr=7e-4`.
 
-### Fine-tuning (Bengali, Gujarati, Gurumukhi, Kannada, Odia, Malayalam)
-
-Per Section 4.1, these languages were fine-tuned at a higher permutation count and dropout, with a lower learning rate:
-
-```bash
-./train.py +experiment=parseq-finetune charset=<language> \
-  data.root_dir=<path to <lang>/datasets> data.train_dir=IIIT-INDIC-HW-WORDS \
-  model.batch_size=254 trainer.accelerator=gpu trainer.devices=4 \
-  ckpt_path=<path to that language's baseline checkpoint>
-```
-
-### Transfer learning from printed text (Table 4)
-
-Section 4.2/4.6 describe a two-stage approach: pretrain on a printed-text dataset for the same language, then continue training on `IIIT-INDIC-HW-WORDS`. This repo does not include printed-text dataset preparation — build/obtain a printed-text LMDB in the same layout, pretrain on it, then continue training on the handwritten data using PARSeq's existing checkpoint-resume mechanism:
-
-```bash
-# Stage 1: pretrain on printed text
-./train.py +experiment=parseq charset=<language> \
-  data.root_dir=<path to printed data> trainer.max_epochs=30 \
-  model.batch_size=254 trainer.accelerator=gpu trainer.devices=4
-
-# Stage 2: continue training on handwritten data from the printed checkpoint
-./train.py +experiment=parseq charset=<language> \
-  data.root_dir=<path to <lang>/datasets> data.train_dir=IIIT-INDIC-HW-WORDS \
-  model.batch_size=254 trainer.accelerator=gpu trainer.devices=4 \
-  ckpt_path=<path to stage-1 checkpoint>
-```
-
-## Evaluation (Table 2)
+## Evaluation
 
 ```bash
 ./test.py <path to checkpoint>.ckpt --data_root=<path to <lang>/datasets>
