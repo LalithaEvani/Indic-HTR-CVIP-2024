@@ -95,3 +95,7 @@ This work builds on PARSeq:
 ## License
 
 Apache License 2.0 (see `LICENSE`). See `NOTICE` for upstream attribution — this repo is a fork of [baudm/parseq](https://github.com/baudm/parseq).
+
+## Acknowledgments
+
+All code in this repository was written by the authors. Claude (Anthropic) assisted with reviewing, cleaning up, and reorganizing the codebase for this public release.
