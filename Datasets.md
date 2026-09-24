@@ -2,6 +2,12 @@ We use **IIIT-INDIC-HW-WORDS**:
 
 > Gongidi, S., Jawahar, C.: iiit-indic-hw-words: A dataset for indic handwritten text recognition. In: Document Analysis and Recognition–ICDAR 2021: 16th International Conference, Lausanne, Switzerland, September 5-10, 2021, Proceedings, Part IV 16. pp. 444–459. Springer (2021)
 
+**Download:** [cvit.iiit.ac.in/research/projects/cvit-projects/iiit-indic-hw-words](https://cvit.iiit.ac.in/research/projects/cvit-projects/iiit-indic-hw-words)
+— per-language zip files (images, label files, vocabulary files, and a
+README), for the eight scripts hosted there directly (Bengali, Gujarati,
+Gurumukhi, Kannada, Odia, Malayalam, Tamil, Urdu); Devanagari and Telugu are
+linked from the same page as separate datasets.
+
 Word-level handwritten images for ten languages, converted to LMDB (`create_lmdb_dataset.py`) with keys `image-%09d` / `label-%09d` (see `indichtr/data/dataset.py:LmdbDataset`).
 
 ## Per-language statistics

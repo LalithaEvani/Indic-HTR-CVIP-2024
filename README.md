@@ -21,7 +21,7 @@ pip install -e .
 
 ## Dataset
 
-We use [**IIIT-INDIC-HW-WORDS**](Datasets.md) (Gongidi & Jawahar, ICDAR 2021) — word-level handwritten images for the ten languages above. See [`Datasets.md`](Datasets.md) for the dataset reference, per-language statistics, and the expected LMDB directory layout.
+We use [**IIIT-INDIC-HW-WORDS**](Datasets.md) (Gongidi & Jawahar, ICDAR 2021) — word-level handwritten images for the ten languages above, [downloadable here](https://cvit.iiit.ac.in/research/projects/cvit-projects/iiit-indic-hw-words). See [`Datasets.md`](Datasets.md) for the dataset reference, per-language statistics, and the expected LMDB directory layout.
 
 Each language's data is a separate root directory with the following structure:
 
